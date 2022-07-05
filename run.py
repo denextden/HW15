@@ -1,27 +1,27 @@
 query_1 = """
     CREATE TABLE colors ( 
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         color VARCHAR(50) 
     )
     """
 
 query_2 = """
     CREATE TABLE breeds ( 
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         breed VARCHAR(50) 
     ) 
     """
 
 query_3 = """
     CREATE TABLE animal_type (
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         animal_type VARCHAR(50)
     )
     """
 
 query_4 = """ 
     CREATE TABLE new_animals (
-        id INTEGER PRIMARY KEY AUTO_INCREMENT,
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
         animal_id VARCHAR(50),
         animal_type_id INTEGER,
         'name' VARCHAR(50),
@@ -38,7 +38,7 @@ query_4 = """
 
 query_5 = """ 
     CREATE TABLE outcome (
-        id INTEGER PRIMARY KEY AUTO_INCREMENT, 
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
         animal_id INTEGER, subtype VARCHAR(50),
         `type` VARCHAR(50), 
         'month' INTEGER, 
@@ -78,34 +78,37 @@ query_10 = """
     """
 
 query_11 = """
-    UPDATE new_animals SET(animal_type_id) = (
-        SELECT animal_type.id
+    INSERT INTO new_animals (animal_type_id)
+        SELECT DISTINCT animal_type.id
         FROM animal_type
-        JOIN animals ON animals.animal_type = animal_type.animal_type 
-        WHERE animals.animal_id  = new_animals.animal_id   )  
+        JOIN animals ON animals.animal_type = animal_type.animal_type
+        WHERE animals.animal_id = new_animals.animal_id
     """
 
 query_12 = """
-    UPDATE new_animals SET(breed_id) = (
-        SELECT breeds.id 
-        FROM breeds 
-        JOIN animals ON animals.breed = breeds.breed  
+    INSERT INTO new_animals (breed_id)
+        SELECT DISTINCT breeds.id
+        FROM breeds
+        JOIN animals ON animals.breed = breeds.breed
         WHERE animals.animal_id = new_animals.animal_id 
-    ) 
     """
-query_13 = """ 
-    UPDATE new_animals SET(color_1_id) = (
-        SELECT colors.id 
-        FROM colors 
+query_13 = """
+    INSERT INTO new_animals (color_1_id)
+        SELECT DISTINCT colors.id
+        FROM colors
         JOIN animals ON trim(animals.color1) = colors.color
-        WHERE animals.animal_id = new_animals.animal_id  
-    ) 
+        WHERE animals.animal_id = new_animals.animal_id
     """
-query_14 = """ 
-    UPDATE new_animals SET(color_2_id) = (
-        SELECT colors.id 
-        FROM colors 
+query_14 = """
+    INSERT INTO new_animals (color_2_id)
+        SELECT DISTINCT colors.id
+        FROM colors
         JOIN animals ON trim(animals.color2) = colors.color
-        WHERE animals.animal_id = new_animals.animal_id 
-    )
+        WHERE animals.animal_id = new_animals.animal_id
     """
+
+query_15 = """
+    INSERT INTO new_animals
+        SELECT age_upon_outcome
+        FROM outcome        
+"""
